@@ -1,5 +1,6 @@
 // selectors
 var saveButtonEl = $('.saveBtn');
+var textAreaEl = $('.text');
 
 // global variables
 
@@ -17,6 +18,7 @@ function aChristmasCarol(){
 // saved events persist
 saveButtonEl.on('click', function () {
     // save to local storage
-
+    var text = textAreaEl.val();
+    localStorage.setItem('text', text);
     // output text on refresh?
 });
