@@ -3,59 +3,55 @@ var saveButtonEl = $(".saveBtn");
 var textAreaEl = $(".text");
 var currentDay = $("#currentDay");
 
+saveButtonEl.on("click", saveEvent);
+
 // global variables
-var allNotes = [];
-var storage;
 
 // select what to run when page first loads
-function pageLoad(){
+function pageLoad() {
+    showText();
     currentTime();
-    savedText();
+    aChristmasCarol();
+}
+
+function showText() {
+    for (var i = 0; i < localStorage.length; i++) {
+        var key = localStorage.key(i);
+        var value = localStorage.getItem(key);
+        $("div[data-hour='" + key + "'] textarea").val(value);
+    }
 }
 
 // current time
-function currentTime(){
-    var now = moment();
-    currentDay.text(now.format("MMMM DD, YYYY"));
-    
-    /* aChristmasCarol(); */
+function currentTime() {
+    currentDay.text(moment().format("MMMM DD, YYYY"));
 }
 
 // past, present, future
-function aChristmasCarol(){
-    var fakeTime = "Tue Sep 28 2021 " + "09:00:00" + " GMT-0400";
-    var timeObj = moment(fakeTime);
-    console.log(timeObj);
+function aChristmasCarol() {
+    $("div.row").each(function () {
+        var now = moment().format("HH");
+        var row = $(this);
+        var hh = row.attr("data-hour");
 
-    $(".container")
+        if (hh < now) {
+            row.children("textarea").addClass("past").removeClass("future", "present");
+        } else if (hh > now) {
+            row.children("textarea").addClass("future");
+        } else {
+            row.children("textarea").addClass("present");
+        }
+    })
 }
 
-// saveBtn click equals text saved to local storage
-// saved events persist
-saveButtonEl.on("click", function () {
-    // save to local storage
-    /* var text = textAreaEl.val();
-    localStorage.setItem('text', text); */
-    // output text on refresh?
+function saveEvent(event) {
+    var btn = $(event.target);
+    var i = saveButtonEl.index(btn);
 
-    $(".text").each( function(){
-        var select = $(this).val();
-
-        // add each value to the allNotes array
-        allNotes.push(select);
-        console.log(allNotes);
-
-        // allNotes into storage stringify
-        storage = JSON.stringify(allNotes);
-        localStorage.setItem("text", storage);
-
-    })
-});
-
-function savedText() {
-    var retrievedText = localStorage.getItem("text");
-    console.log("retrievedText: ", retrievedText);
-    textAreaEl.append(retrievedText);
+    var text = textAreaEl.eq(i);
+    var value = text.val();
+    var key = text.parent("div").attr("data-hour");
+    localStorage.setItem(key, value);
 }
 
 pageLoad();
