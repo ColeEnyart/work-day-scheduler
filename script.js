@@ -35,7 +35,7 @@ function aChristmasCarol() {
         var hh = row.attr("data-hour");
 
         if (hh < now) {
-            row.children("textarea").addClass("past").removeClass("future", "present");
+            row.children("textarea").addClass("past");
         } else if (hh > now) {
             row.children("textarea").addClass("future");
         } else {
