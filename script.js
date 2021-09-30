@@ -1,19 +1,19 @@
 // selectors
 var saveButtonEl = $(".saveBtn");
 var textAreaEl = $(".text");
-var currentDay = $("#currentDay");
+var currentDayEl = $("#currentDay");
 
+// add handler for click on button
 saveButtonEl.on("click", saveEvent);
 
-// global variables
-
 // select what to run when page first loads
-function pageLoad() {
+function init() {
     showText();
-    currentTime();
+    currentDay();
     aChristmasCarol();
 }
 
+// get what is in local storage and 
 function showText() {
     for (var i = 0; i < localStorage.length; i++) {
         var key = localStorage.key(i);
@@ -22,12 +22,12 @@ function showText() {
     }
 }
 
-// current time
-function currentTime() {
-    currentDay.text(moment().format("MMMM DD, YYYY"));
+// display current day
+function currentDay() {
+    currentDayEl.text(moment().format("MMMM DD, YYYY"));
 }
 
-// past, present, future
+// figure out past, present, future
 function aChristmasCarol() {
     $("div.row").each(function () {
         var now = moment().format("HH");
@@ -44,6 +44,7 @@ function aChristmasCarol() {
     })
 }
 
+// save to local storage the event of each index
 function saveEvent(event) {
     var btn = $(event.target);
     var i = saveButtonEl.index(btn);
@@ -54,4 +55,4 @@ function saveEvent(event) {
     localStorage.setItem(key, value);
 }
 
-pageLoad();
+init();
